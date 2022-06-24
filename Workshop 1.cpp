@@ -4173,7 +4173,7 @@ void updateMenu()
 		 }
 		 else
 		 {
-			 cout << "There are no ticket purchased yet." << endl;
+			 cout << "no ticket." << endl;
 			 for (int i = 0; i < 3; i++)
 			 {
 				 cout << endl;
