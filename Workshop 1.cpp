@@ -182,7 +182,20 @@ char adminValid(char adminPass)
 	cin >> adminID;
 
 	cout << "Password: ";
-	cin >> password;
+	
+	char ch;
+	while ((ch = _getch()) != '\r') {
+		if (ch == '\b') {
+			if (password.length() > 0) {
+				password.pop_back();
+				cout << "\b \b";
+			}
+		}
+		else {
+			password.push_back(ch);
+			cout.put('*');
+		}
+	}
 
 	//check from the database
 	string checkAdmin = "Select * from Administrator where Admin_ID = '" + adminID + "' and Admin_Password = '" + password + "'";
