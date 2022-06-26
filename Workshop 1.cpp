@@ -2046,7 +2046,8 @@ void updateMenu()
 			cout << "|        4. Senior discount                  |" << endl;
 			cout << "|        5. Insert railway transport         |" << endl;
 			cout << "|        6. Insert railway driver            |" << endl;
-			cout << "|        7. Exit                             |" << endl;
+			cout << "|        7. Admin in charge of the day       |" << endl;
+			cout << "|        8. Exit                             |" << endl;
 			cout << "**********************************************" << endl;
 
 			cout << "\nEnter the update option: ";
@@ -2836,6 +2837,85 @@ void updateMenu()
 			} while (again == "Y" || again == "y");
 		}
 		else if (updateChoice == "7")
+		{
+			system("cls");
+			showTime();
+
+			string administratorID;
+			vector<string> adminVec;
+			char pass = 'n';
+
+			// show administrator list
+			cout << "**********************************************" << endl;
+			cout << "|                  Admin List                |" << endl;
+			cout << "**********************************************" << endl;
+
+			string viewAdmin = "select * from administrator";
+			const char* va = viewAdmin.c_str();
+			qstate = mysql_query(conn, va);
+
+			if (!qstate)
+			{
+				res = mysql_store_result(conn);
+				if (res->row_count >= 1)
+				{
+					cout << setw(15) << left << "Admin ID" << setw(30) << left << "Admin Name" << setw(20) << left << "Admin IC" << setw(20) << left << "Admin Password" << setw(20) << left << "Admin In Charge" << endl;
+					while ((row = mysql_fetch_row(res)))
+					{
+						cout << setw(15) << left << row[0] << setw(30) << left << row[1] << setw(20) << left << row[2] << setw(20) << left << row[3] << setw(20) << left << row[4] << endl;
+						adminVec.push_back(row[0]);
+					}
+				}
+			}
+
+			for (int i = 0; i < 3; i++)
+			{
+				cout << endl;
+			}
+
+			do
+			{
+				cout << "Enter the Admin ID to change to admin in charge: ";
+				cin >> administratorID;
+
+				for (int i = 0; i < adminVec.size(); i++)
+				{
+					if (administratorID == adminVec[i])
+					{
+						pass = 'y';
+						break;
+					}
+				}
+
+				if (pass == 'n')
+				{
+					cout << "No such Admin ID! Try again!" << endl;
+				}
+			} while (pass == 'n');
+
+			// change all the admin_in_charge to 'n', then only the entered become 'y'
+			string updateInCharge = "UPDATE administrator SET Admin_In_Charge = 'n'";
+			const char* uic = updateInCharge.c_str();
+			qstate = mysql_query(conn, uic);
+			if (!qstate)
+			{
+				res = mysql_store_result(conn);
+			}
+
+			string onlyInCharge = "UPDATE administrator SET Admin_In_Charge = 'y' where Admin_ID = '" + administratorID + "'";
+			const char* oic = onlyInCharge.c_str();
+			qstate = mysql_query(conn, oic);
+			if (!qstate)
+			{
+				res = mysql_store_result(conn);
+			}
+
+			cout << "The admin with ID " << administratorID << " has been selected as Admin_In_Charge." << endl;
+			cout << "Enter any key to back to update menu..." << endl;
+			_getch();
+			return updateMenu();
+		}
+		else if (updateChoice == "8")
 		{
 			return controlMenu();
 		}
