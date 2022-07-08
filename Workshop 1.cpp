@@ -111,6 +111,72 @@ int main()
 	} while (position != "1" && position != "2" && position != "3");
 }
 
+
+void showTime()
+{
+	int year, month, day, hour, minute, second;
+	string date, curTime;
+	string morOrNight;
+
+	time_t now = time(0);
+	tm* ltm = localtime(&now);
+
+	year = 1900 + ltm->tm_year;
+	month = 1 + ltm->tm_mon;
+	day = ltm->tm_mday;
+
+	hour = ltm->tm_hour;
+	minute = ltm->tm_min;
+	second = ltm->tm_sec;
+
+	if (hour < 12)
+	{
+		morOrNight = "am";
+	}
+	else if (hour == 12)
+	{
+		morOrNight = "pm";
+	}
+	else if (hour > 12)
+	{
+		morOrNight = "pm";
+		hour -= 12;
+	}
+	else if (hour == 24)
+	{
+		morOrNight = "am";
+		hour = 0;
+	}
+
+	date = to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+
+	if (minute < 10)
+	{
+		if (second < 10)
+		{
+			curTime = to_string(hour) + ":0" + to_string(minute) + ":0" + to_string(second) + " " + morOrNight;
+		}
+		else
+		{
+			curTime = to_string(hour) + ":0" + to_string(minute) + ":" + to_string(second) + " " + morOrNight;
+		}
+	}
+	else
+	{
+		if (second < 10)
+		{
+			curTime = to_string(hour) + ":" + to_string(minute) + ":0" + to_string(second) + " " + morOrNight;
+		}
+		else
+		{
+			curTime = to_string(hour) + ":" + to_string(minute) + ":" + to_string(second) + " " + morOrNight;
+		}
+	}
+
+	cout << setw(100) << left << date << right << curTime << endl;
+}
+
+
 void customerReceipt(string IC, string purchaseTicketID, string purchaseTripID, string purchaseRailwayID, string purchaseDepartStation, string purchaseDestinatedStation, string purchaseSeat, string tripDate, string purchaseTimeDepart, string purchaseTimeArrive, double finalPrice)
 {
 	string curAdmin;
