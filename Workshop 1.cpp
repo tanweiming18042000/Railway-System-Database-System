@@ -3154,7 +3154,35 @@ void updateMenu()
 	 string curDate, curMonth, curDay;
 	 string again;
 
+	 // get date and only shows ticket that is in the future
+	 time_t now = time(0);
+	 tm* ltm = localtime(&now);
 
+	 year = 1900 + ltm->tm_year;
+	 month = 1 + ltm->tm_mon;
+	 day = ltm->tm_mday;
+
+	 if (month < 10)
+	 {
+		 curMonth = "0" + to_string(month);
+	 }
+	 else
+	 {
+		 curMonth = to_string(month);
+	 }
+
+	 if (day < 10)
+	 {
+		 curDay = "0" + to_string(day);
+	 }
+	 else
+	 {
+		 curDay = to_string(day);
+	 }
+
+	 curDate = to_string(year) + "-" + curMonth + "-" + curDay;
+	
+	 
 	 // retrieve base price, privilage price and senior price
 	 string retrievePrice = "select base_price, privilage_price, senior_discount from price_update";
 	 const char* rp = retrievePrice.c_str();
@@ -3280,7 +3308,7 @@ void updateMenu()
 	 cout << "|                 Trip List                  |" << endl;
 	 cout << "**********************************************" << endl;
 
-	 string viewTripList = "select * from trip";
+	 string viewTripList = "select * from trip where trip_date >= '" + curDate + "'";
 	 const char* vtr = viewTripList.c_str();
 	 qstate = mysql_query(conn, vtr);
 
@@ -3362,14 +3390,43 @@ void updateMenu()
 	 // take current time take and compare the trip_date to the current time, if greater, only shows
 	 int year, month, day;
 	 string curMonth, curDay;
+	 
+	 // get date and only shows ticket that is in the future
+	 time_t now = time(0);
+	 tm* ltm = localtime(&now);
 
+	 year = 1900 + ltm->tm_year;
+	 month = 1 + ltm->tm_mon;
+	 day = ltm->tm_mday;
+
+	 if (month < 10)
+	 {
+		 curMonth = "0" + to_string(month);
+	 }
+	 else
+	 {
+		 curMonth = to_string(month);
+	 }
+
+	 if (day < 10)
+	 {
+		 curDay = "0" + to_string(day);
+	 }
+	 else
+	 {
+		 curDay = to_string(day);
+	 }
+
+	 curDate = to_string(year) + "-" + curMonth + "-" + curDay;
+	 
 	 system("cls");
-
+	 showTime();	
+	 
 	 cout << "**********************************************" << endl;
 	 cout << "|                 Trip List                  |" << endl;
 	 cout << "**********************************************" << endl;
 
-	 string viewTripList = "select * from trip";
+	 string viewTripList = "select * from trip where trip_date >= '" + curDate + "'";
 	 const char* vtr = viewTripList.c_str();
 	 qstate = mysql_query(conn, vtr);
 
